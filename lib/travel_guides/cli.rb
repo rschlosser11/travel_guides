@@ -1,16 +1,13 @@
 class Interface
   def call
-    welcome
-    # put list of cities/locations in country selected
-    select_continent
-    # put the overview of the city selected
-  end
-
-  def welcome
     puts "Welcome to travel guides!"
-    # put a list of of the available countries to choose from
-    puts "Please select the number of the country you want to travel to:"
-    @country_num = gets.strip.to_i
+    # put list of continents/regions to choose from
+    # ask user to select continent/region they wish to travel
+    # display the countries in that continent
+    # ask user what country
+    # display overview of that country
+    # OPTIONAL add other options about traveling to specific country (Things to Do, Shopping/Nightlife, Food/Drink)
+    # menu to return to list of countries, to return to list of continents, or to exit
   end
 
   def select_continent
