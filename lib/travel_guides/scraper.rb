@@ -19,5 +19,17 @@ class Scraper
   def get_countries
     self.get_doc.css('#africa .menu-columns li')
   end
+  # change output to an array of hashes
+  def get_hash_from_scrape
+    countries = []
+    Scraper.new.get_countries.each_with_index do |country, index|
+      country_hash = {
+        :name => "#{Scraper.new.get_doc.css('#africa .menu-columns li')[index].text}",
+        :url => "#{Scraper.new.get_doc.css('#africa .menu-columns li').css('a')[index]['href']}"
+      }
+      countries << country_hash
+    end
+    countries
+  end
   # Get overview of the country chosen by the user
 end

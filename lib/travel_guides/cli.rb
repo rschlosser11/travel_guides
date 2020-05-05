@@ -2,7 +2,7 @@ class Interface
   def call
     welcome
     # put list of cities/locations in country selected
-    select_city
+    select_continent
     # put the overview of the city selected
   end
 
@@ -13,8 +13,8 @@ class Interface
     @country_num = gets.strip.to_i
   end
 
-  def select_city
-    puts "Please select the number of the city you wish to travel: "
+  def select_continent
+    puts "Please select the number of the continent you wish to travel: "
     @city_num = gets.strip.to_i
   end
 

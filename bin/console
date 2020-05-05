@@ -11,4 +11,3 @@ require './config/environment'
 
 require "irb"
 IRB.start(__FILE__)
-Scraper.new.get_doc
