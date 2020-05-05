@@ -5,10 +5,7 @@ class Continent
 
   def initialize(name)
     @name = name
-  end
-
-  def self.new_from_scrape
-    Scraper.new.get_continents.each {|continent_name| self.all << Continent.new(continent_name)}
+    self.class.all << self
   end
 
   def self.all

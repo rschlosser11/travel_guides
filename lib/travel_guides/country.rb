@@ -1,15 +1,12 @@
 class Country
-  attr_accessor :name, :url
+  attr_accessor :name, :url, :continent
 
   @@all = []
 
-  def self.new_from_scrape
-    Scraper.new.get_hash_from_scrape.each do |country|
-      new_country = Country.new
-      @@all << new_country
-      country.each do |key, value|
-        new_country.send("#{key}=", value)
-      end
+  def initialize(country_hash)
+    country_hash.each do |key, value|
+      self.send("#{key}=", value)
+      self.class.all << self
     end
   end
 

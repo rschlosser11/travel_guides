@@ -1,10 +1,10 @@
 class Scraper
   # Get document
-  def get_doc
+  def self.get_doc
     Nokogiri::HTML(open('https://www.worldtravelguide.net/country-guides/'))
   end
   # Get list of continents
-  def get_continents
+  def self.get_continents
     continents = [];
     continents << self.get_doc.css('.africa').text
     continents << self.get_doc.css('.antarctica').text
@@ -15,23 +15,22 @@ class Scraper
     continents << self.get_doc.css('.north-america').text
     continents << self.get_doc.css('.oceania').text
     continents << self.get_doc.css('.south-america').text
-    continents
+    continents.each {|continent_name| Continent.new(continent_name)}
   end
   # Get list of countries
-  def get_countries
-    self.get_doc.css('#africa .menu-columns li')
-  end
-  # change output of #get_countries to an array of hashes
-  def get_hash_from_scrape
+  def self.get_countries
+    # change the array to be an array of hashes for each country
     countries = []
-    Scraper.new.get_countries.each_with_index do |country, index|
+    self.get_doc.css('#africa .menu-columns li').each_with_index do |country, index|
       country_hash = {
-        :name => "#{Scraper.new.get_doc.css('#africa .menu-columns li')[index].text}",
-        :url => "#{Scraper.new.get_doc.css('#africa .menu-columns li').css('a')[index]['href']}"
+        :name => "#{self.get_doc.css('#africa .menu-columns li')[index].text}",
+        :url => "#{self.get_doc.css('#africa .menu-columns li').css('a')[index]['href']}",
+        :continent => "Africa"
       }
       countries << country_hash
     end
-    countries
+    # create a new instance of country for each hash
+    countries.each {|country| Country.new(country)}
   end
   # Get overview of the country chosen by the user
 end
