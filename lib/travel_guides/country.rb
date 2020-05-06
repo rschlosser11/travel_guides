@@ -25,4 +25,8 @@ class Country
       self.new(hash)
     end
   end
+
+  def self.find_by_continent(continent)
+    self.all.select{|country| country.continent == continent}
+  end
 end
