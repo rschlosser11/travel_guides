@@ -19,8 +19,12 @@ class CommandLine
 
   def display_continents
     # NEED TO check to see if continents created already
-    Scraper.get_continents
-    Continent.all.each_with_index {|continent, index| puts "#{index + 1}. #{continent.name}"}
+    if Continent.all.length == 0
+      Scraper.get_continents
+      Continent.all.each_with_index {|continent, index| puts "#{index + 1}. #{continent.name}"}
+    else
+      Continent.all.each_with_index {|continent, index| puts "#{index + 1}. #{continent.name}"}
+    end
   end
 
   def display_countries
@@ -30,8 +34,12 @@ class CommandLine
     continent = Continent.all[input - 1] if input != 'exit'
     puts "Please wait while we generate a list of countries you can visit. This may take a bit depending on the region!"
     # NEED TO Check to see if the continent's countries have been called already
-    Scraper.get_countries(continent)
-    Country.find_by_continent(continent).each_with_index {|country, index| puts "#{index + 1}. #{country.name}"}
+    if Country.find_by_continent(continent).length == 0
+      Scraper.get_countries(continent)
+      Country.find_by_continent(continent).each_with_index {|country, index| puts "#{index + 1}. #{country.name}"}
+    else
+      Country.find_by_continent(continent).each_with_index {|country, index| puts "#{index + 1}. #{country.name}"}
+    end
     self.exit if input == 'exit'
   end
 
