@@ -6,11 +6,23 @@ class Country
   def initialize(country_hash)
     country_hash.each do |key, value|
       self.send("#{key}=", value)
-      self.class.all << self
     end
+    self.class.all << self
   end
 
   def self.all
     @@all
+  end
+
+  def self.find_by_name(name)
+    self.all.find{|country| country.name == name}
+  end
+
+  def self.find_or_create_by_hash(hash)
+    if self.find_by_name(hash['name'])
+      self.find_by_name(hash['name'])
+    else
+      self.new(hash)
+    end
   end
 end

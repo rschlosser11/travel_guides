@@ -18,19 +18,16 @@ class Scraper
     continents.each {|continent_name| Continent.new(continent_name)}
   end
   # Get list of countries
-  def self.get_countries
+  def self.get_countries(continent)
     # change the array to be an array of hashes for each country
-    countries = []
-    self.get_doc.css('#africa .menu-columns li').each_with_index do |country, index|
+    self.get_doc.css("#africa .menu-columns li").each_with_index do |country, index|
       country_hash = {
-        :name => "#{self.get_doc.css('#africa .menu-columns li')[index].text}",
-        :url => "#{self.get_doc.css('#africa .menu-columns li').css('a')[index]['href']}",
-        :continent => "Africa"
+        :name => "#{self.get_doc.css("#africa .menu-columns li")[index].text}",
+        :url => "#{self.get_doc.css("#africa .menu-columns li").css("a")[index]["href"]}",
+        :continent => Continent.find_or_create_by_name(continent.name)
       }
-      countries << country_hash
+      Country.find_or_create_by_hash(country_hash)
     end
-    # create a new instance of country for each hash
-    countries.each {|country| Country.new(country)}
   end
   # Get overview of the country chosen by the user
 end
