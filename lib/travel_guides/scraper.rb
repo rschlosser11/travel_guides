@@ -20,10 +20,11 @@ class Scraper
   # Get list of countries
   def self.get_countries(continent)
     # change the array to be an array of hashes for each country
-    self.get_doc.css("#africa .menu-columns li").each_with_index do |country, index|
+    continent_name = continent.name.downcase.gsub(" ","-")
+    self.get_doc.css("##{continent_name} .menu-columns li").each_with_index do |country, index|
       country_hash = {
-        :name => "#{self.get_doc.css("#africa .menu-columns li")[index].text}",
-        :url => "#{self.get_doc.css("#africa .menu-columns li").css("a")[index]["href"]}",
+        :name => "#{self.get_doc.css("##{continent_name} .menu-columns li")[index].text}",
+        :url => "#{self.get_doc.css("##{continent_name} .menu-columns li").css("a")[index]["href"]}",
         :continent => Continent.find_or_create_by_name(continent.name)
       }
       Country.find_or_create_by_hash(country_hash)
