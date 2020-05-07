@@ -27,6 +27,18 @@ class CommandLine
     end
   end
 
+  # def display_countries(input)
+  #   input = input.to_i
+  #   continent = Continent.all[input - 1]
+  #   puts "Please wait while we generate a list of countries you can visit. This may take a bit depending on the region!"
+  #   # NEED TO Check to see if the continent's countries have been called already
+  #   if Country.find_by_continent(continent).length == 0
+  #     Scraper.get_countries(continent)
+  #     Country.find_by_continent(continent).each_with_index {|country, index| puts "#{index + 1}. #{country.name}"}
+  #   else
+  #     Country.find_by_continent(continent).each_with_index {|country, index| puts "#{index + 1}. #{country.name}"}
+  #   end
+  # end
   def display_countries(input)
     input = input.to_i
     continent = Continent.all[input - 1]
@@ -34,9 +46,23 @@ class CommandLine
     # NEED TO Check to see if the continent's countries have been called already
     if Country.find_by_continent(continent).length == 0
       Scraper.get_countries(continent)
-      Country.find_by_continent(continent).each_with_index {|country, index| puts "#{index + 1}. #{country.name}"}
+      countries = Country.find_by_continent(continent)
+      index = 0
+      while index < countries.length
+        if index % 4 == 0 && index != 0
+          puts "#{countries[index - 4].name.ljust(16)} \t #{countries[index -3].name.ljust(16)} \t #{countries[index - 2].name.ljust(16)} \t #{countries[index - 1].name.ljust(16)}"
+        end
+        index += 1
+      end
     else
-      Country.find_by_continent(continent).each_with_index {|country, index| puts "#{index + 1}. #{country.name}"}
+      countries = Country.find_by_continent(continent)
+      index = 0
+      while index < countries.length
+        if index % 4 == 0 && index != 0
+          puts "#{countries[index - 4].name.ljust(16)} \t #{countries[index -3].name.ljust(16)} \t #{countries[index - 2].name.ljust(16)} \t #{countries[index - 1].name.ljust(16)}"
+        end
+        index += 1
+      end
     end
   end
 
@@ -48,7 +74,7 @@ class CommandLine
   def display_travel_info(input)
     input = input.to_i
     country = Country.all[input - 1]
-    puts Scraper.get_travel_info(country)
+    puts Scraper.get_travel_info(country).fit
   end
 
   def display_countries_and_menu
