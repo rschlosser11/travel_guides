@@ -63,9 +63,9 @@ class CommandLine
     # NEED TO check to see if continents created already
     if Continent.all.length == 0
       Scraper.get_continents
-      Continent.all.each_with_index {|continent, index| puts "#{index + 1}. #{continent.name}"}
+      Continent.all.each {|continent| puts continent.name}
     else
-      Continent.all.each_with_index {|continent, index| puts "#{index + 1}. #{continent.name}"}
+      Continent.all.each {|continent| puts continent.name}
     end
   end
 
@@ -91,8 +91,17 @@ class CommandLine
       countries = Country.find_by_continent(continent)
       index = 0
       while index < countries.length
-        if index % 3 == 0 && index != 0
+        if index % 3 == 0 && index != 0 && index != countries.length - 1
           puts "#{countries[index - 3].name.ljust(30)}   #{countries[index -2].name.ljust(30)}   #{countries[index - 1].name.ljust(30)}"
+        elsif countries.length == 1
+          puts "#{countries[index].name.ljust(30)}"
+        elsif index == countries.length - 1 && index % 3 == 0
+          puts "#{countries[index - 3].name.ljust(30)}   #{countries[index -2].name.ljust(30)}   #{countries[index - 1].name.ljust(30)}"
+          puts "#{countries[index].name.ljust(30)}"
+        elsif index == countries.length - 1 && index % 2 == 0
+          puts "#{countries[index - 1].name.ljust(30)}   #{countries[index].name.ljust(30)}"
+        elsif index == countries.length - 1 && index % 2 == 1
+          puts "#{countries[index].name.ljust(30)}"
         end
         index += 1
       end
@@ -100,8 +109,17 @@ class CommandLine
       countries = Country.find_by_continent(continent)
       index = 0
       while index < countries.length
-        if index % 3 == 0 && index != 0
+        if index % 3 == 0 && index != 0 && index != countries.length - 1
           puts "#{countries[index - 3].name.ljust(30)}   #{countries[index -2].name.ljust(30)}   #{countries[index - 1].name.ljust(30)}"
+        elsif countries.length == 1
+          puts "#{countries[index].name.ljust(30)}"
+        elsif index == countries.length - 1 && index % 3 == 0
+          puts "#{countries[index - 3].name.ljust(30)}   #{countries[index -2].name.ljust(30)}   #{countries[index - 1].name.ljust(30)}"
+          puts "#{countries[index].name.ljust(30)}"
+        elsif index == countries.length - 1 && index % 2 == 0
+          puts "#{countries[index - 1].name.ljust(30)}   #{countries[index].name.ljust(30)}"
+        elsif index == countries.length - 1 && index % 2 == 1
+          puts "#{countries[index].name.ljust(30)}"
         end
         index += 1
       end
