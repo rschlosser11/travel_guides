@@ -27,7 +27,7 @@ class CommandLine
     # display the countries in that continent
     # ask user what country
     puts ""
-    puts "Please type the name of the country from the given list \n or type 'regions' to return to the region list \n or type 'exit'"
+    puts "Please type the name of the country/state that you'd like to explore\n or type 'regions' to return to the region list \n or type 'exit'"
     puts ""
     country_input = gets.strip.split(" ").map{|word| word.capitalize}.join(" ")
     # display_travel_info_and_menu(country_input, continent_input)
@@ -47,12 +47,29 @@ class CommandLine
     puts ""
     puts "To go back to the list of countries type 'countries', \nto return to the list of regions type 'regions', \nto exit type 'exit'."
     final_input = gets.strip.downcase
+    while final_input == 'countries'
+      self.display_countries(continent_input)
+      puts "Please type the name of the country/state you'd like to explore\n or type 'regions' to return to the region list \n or type 'exit'"
+      puts ""
+      country_input = gets.strip.split(" ").map{|word| word.capitalize}.join(" ")
+      if country_input.downcase == 'regions'
+        self.start
+      elsif country_input.downcase == 'exit'
+        self.leave
+      elsif Country.find_by_name(country_input)
+        self.display_travel_info(country_input)
+        puts ""
+        puts "To go back to the list of countries type 'countries', \nto return to the list of regions type 'regions', \nto exit type 'exit'."
+        final_input = gets.strip.downcase
+      else
+        "Please enter a valid input."
+        self.start
+      end
+    end
     if final_input == 'exit'
       self.leave
     elsif final_input == "regions"
       self.start
-    elsif final_input == 'countries'
-      self.display_countries(continent_input)
     else
       "Please enter a valid input."
       self.start
@@ -60,7 +77,7 @@ class CommandLine
   end
 
   def display_continents
-    # NEED TO check to see if continents created already
+    # check to see if continents created already
     if Continent.all.length == 0
       Scraper.get_continents
       Continent.all.each {|continent| puts continent.name}
@@ -69,60 +86,37 @@ class CommandLine
     end
   end
 
-  # def display_countries(input)
-  #   input = input.to_i
-  #   continent = Continent.all[input - 1]
-  #   puts "Please wait while we generate a list of countries you can visit. This may take a bit depending on the region!"
-  #   # NEED TO Check to see if the continent's countries have been called already
-  #   if Country.find_by_continent(continent).length == 0
-  #     Scraper.get_countries(continent)
-  #     Country.find_by_continent(continent).each_with_index {|country, index| puts "#{index + 1}. #{country.name}"}
-  #   else
-  #     Country.find_by_continent(continent).each_with_index {|country, index| puts "#{index + 1}. #{country.name}"}
-  #   end
-  # end
+  def display_countries_columns(continent)
+    countries = Country.find_by_continent(continent)
+    index = 0
+    while index < countries.length
+      if index % 3 == 0 && index != 0 && index != countries.length - 1
+        puts "#{countries[index - 3].name.ljust(30)}   #{countries[index -2].name.ljust(30)}   #{countries[index - 1].name.ljust(30)}"
+      elsif countries.length == 1
+        puts "#{countries[index].name.ljust(30)}"
+      elsif index == countries.length - 1 && index % 3 == 0
+        puts "#{countries[index - 3].name.ljust(30)}   #{countries[index -2].name.ljust(30)}   #{countries[index - 1].name.ljust(30)}"
+        puts "#{countries[index].name.ljust(30)}"
+      elsif index == countries.length - 1 && index % 2 == 0
+        puts "#{countries[index - 1].name.ljust(30)}   #{countries[index].name.ljust(30)}"
+      elsif index == countries.length - 1 && index % 2 == 1
+        puts "#{countries[index].name.ljust(30)}"
+      end
+      index += 1
+    end
+  end
+
   def display_countries(input)
     continent = Continent.all.find{|continent| continent.name == input}
-    puts "Please wait while we generate a list of countries you can visit. This may take a bit depending on the region!"
-    puts ""
     # NEED TO Check to see if the continent's countries have been called already
     if Country.find_by_continent(continent).length == 0
+      puts "Please wait while we generate a list of countries you can visit. This may take a bit depending on the region!"
+      puts ""
       Scraper.get_countries(continent)
-      countries = Country.find_by_continent(continent)
-      index = 0
-      while index < countries.length
-        if index % 3 == 0 && index != 0 && index != countries.length - 1
-          puts "#{countries[index - 3].name.ljust(30)}   #{countries[index -2].name.ljust(30)}   #{countries[index - 1].name.ljust(30)}"
-        elsif countries.length == 1
-          puts "#{countries[index].name.ljust(30)}"
-        elsif index == countries.length - 1 && index % 3 == 0
-          puts "#{countries[index - 3].name.ljust(30)}   #{countries[index -2].name.ljust(30)}   #{countries[index - 1].name.ljust(30)}"
-          puts "#{countries[index].name.ljust(30)}"
-        elsif index == countries.length - 1 && index % 2 == 0
-          puts "#{countries[index - 1].name.ljust(30)}   #{countries[index].name.ljust(30)}"
-        elsif index == countries.length - 1 && index % 2 == 1
-          puts "#{countries[index].name.ljust(30)}"
-        end
-        index += 1
-      end
+      display_countries_columns(continent)
     else
-      countries = Country.find_by_continent(continent)
-      index = 0
-      while index < countries.length
-        if index % 3 == 0 && index != 0 && index != countries.length - 1
-          puts "#{countries[index - 3].name.ljust(30)}   #{countries[index -2].name.ljust(30)}   #{countries[index - 1].name.ljust(30)}"
-        elsif countries.length == 1
-          puts "#{countries[index].name.ljust(30)}"
-        elsif index == countries.length - 1 && index % 3 == 0
-          puts "#{countries[index - 3].name.ljust(30)}   #{countries[index -2].name.ljust(30)}   #{countries[index - 1].name.ljust(30)}"
-          puts "#{countries[index].name.ljust(30)}"
-        elsif index == countries.length - 1 && index % 2 == 0
-          puts "#{countries[index - 1].name.ljust(30)}   #{countries[index].name.ljust(30)}"
-        elsif index == countries.length - 1 && index % 2 == 1
-          puts "#{countries[index].name.ljust(30)}"
-        end
-        index += 1
-      end
+      puts ""
+      display_countries_columns(continent)
     end
   end
 
@@ -144,6 +138,23 @@ class CommandLine
     else
       "Please enter a valid input."
       self.display_countries_and_menu(continent_input)
+    end
+  end
+
+  def menu_after_countries
+    puts "Please type the name of the country from the given list \n or type 'regions' to return to the region list \n or type 'exit'"
+    puts ""
+    country_input = gets.strip.split(" ").map{|word| word.capitalize}.join(" ")
+    # display_travel_info_and_menu(country_input, continent_input)
+    if country_input.downcase == 'regions'
+      self.start
+    elsif country_input.downcase == 'exit'
+      self.leave
+    elsif Country.find_by_name(country_input)
+      self.display_travel_info(country_input)
+    else
+      "Please enter a valid input."
+      self.start
     end
   end
 
