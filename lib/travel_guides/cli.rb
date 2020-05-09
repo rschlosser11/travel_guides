@@ -141,6 +141,12 @@ class CommandLine
 
   def display_travel_info(country_input)
     country = Country.find_by_name(country_input)
-    puts WordWrap.ww "#{Scraper.get_travel_info(country)}", 100
+    travel_info = Scraper.get_travel_info(country)
+    while travel_info.index(/[\.!?]\w/)
+      travel_info = travel_info.insert(travel_info.index(/[\.!?]\w/) + 1, "\n\n")
+    end
+    puts ""
+    puts WordWrap.ww "#{travel_info}", 100
+    puts ""
   end
 end
