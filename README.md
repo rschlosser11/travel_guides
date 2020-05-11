@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Download or clone this repository from GitHub. In your terminal, navigate to the folder that you've just downloaded and type ./bin/travel-guides to run the CLI.
 
 ## Development
 

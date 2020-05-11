@@ -18,19 +18,18 @@ class CommandLine
   end
 
   def continent_menu(continent_input, country_input, last_input)
-    continent_num = gets.strip.to_i
-    @continent_input = Continent.all[continent_num - 1].name
+    @continent_input = gets.strip.split(" ").map{|word| word.capitalize}.join(" ")
     continent_input = @continent_input
     country_input = @country_input
     last_input = @last_input
-    if @continent_input.downcase == 'exit'
-      puts ""
-      self.leave
-    elsif Continent.find_by_name(continent_input)
+    if Continent.find_by_name(continent_input)
       display_countries(@continent_input)
       puts "Please type the name of the country/state that you'd like to explore\n or type 'regions' to return to the region list \n or type 'exit'"
       @country_input = gets.strip.split(" ").map{|word| word.capitalize}.join(" ")
       self.country_menu(continent_input, country_input, last_input)
+    elsif @continent_input.downcase == 'exit'
+      puts ""
+      self.leave
     else
       puts ""
       puts @@pastel.red("Please type the name of a valid region or 'exit'.")
@@ -96,13 +95,13 @@ class CommandLine
       Scraper.get_continents
       puts ""
       puts "--------------------------"
-      Continent.all.each_with_index {|continent, index| puts "#{@@pastel.cyan(index + 1)}. #{@@pastel.cyan(continent.name)}"}
+      Continent.all.each {|continent| puts "#{@@pastel.cyan(continent.name)}"}
       puts "--------------------------"
       puts ""
     else
       puts ""
       puts "--------------------------"
-      Continent.all.each_with_index {|continent, index| puts "#{@@pastel.cyan(index + 1)}. #{@@pastel.cyan(continent.name)}"}
+      Continent.all.each {|continent| puts "#{@@pastel.cyan(continent.name)}"}
       puts "--------------------------"
       puts ""
     end
