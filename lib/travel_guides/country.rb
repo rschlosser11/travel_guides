@@ -1,4 +1,4 @@
-class Country
+class TravelGuides::Country
   attr_accessor :name, :url, :continent
 
   @@all = []

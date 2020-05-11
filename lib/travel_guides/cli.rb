@@ -1,4 +1,4 @@
-class CommandLine
+class TravelGuides::CommandLine
   @@font = TTY::Font.new(:straight)
   @@pastel = Pastel.new
   def call
@@ -22,7 +22,7 @@ class CommandLine
     continent_input = @continent_input
     country_input = @country_input
     last_input = @last_input
-    if Continent.find_by_name(continent_input)
+    if TravelGuides::Continent.find_by_name(continent_input)
       display_countries(@continent_input)
       puts "Please type the name of the country/state that you'd like to explore\n or type 'regions' to return to the region list \n or type 'exit'"
       @country_input = gets.strip.split(" ").map{|word| word.capitalize}.join(" ")
@@ -49,7 +49,7 @@ class CommandLine
       puts ""
     elsif @country_input.downcase == 'exit'
       self.leave
-    elsif Country.find_by_name(@country_input)
+    elsif TravelGuides::Country.find_by_name(@country_input)
       display_travel_info(@country_input)
       puts "To return to the country/state list type 'countries'\n to return to the region list type 'regions'\n to exit type 'exit'."
       @last_input = gets.strip.downcase
@@ -91,24 +91,24 @@ class CommandLine
 
   def display_continents
     # check to see if continents created already
-    if Continent.all.length == 0
-      Scraper.get_continents
+    if TravelGuides::Continent.all.length == 0
+      TravelGuides::Scraper.get_continents
       puts ""
       puts "--------------------------"
-      Continent.all.each {|continent| puts "#{@@pastel.cyan(continent.name)}"}
+      TravelGuides::Continent.all.each {|continent| puts "#{@@pastel.cyan(continent.name)}"}
       puts "--------------------------"
       puts ""
     else
       puts ""
       puts "--------------------------"
-      Continent.all.each {|continent| puts "#{@@pastel.cyan(continent.name)}"}
+      TravelGuides::Continent.all.each {|continent| puts "#{@@pastel.cyan(continent.name)}"}
       puts "--------------------------"
       puts ""
     end
   end
 
   def display_countries_columns(continent)
-    countries = Country.find_by_continent(continent)
+    countries = TravelGuides::Country.find_by_continent(continent)
     index = 0
     while index < countries.length
       if index % 3 == 0 && index != 0 && index != countries.length - 1
@@ -128,13 +128,13 @@ class CommandLine
   end
 
   def display_countries(input)
-    continent = Continent.all.find{|continent| continent.name == input}
+    continent = TravelGuides::Continent.all.find{|continent| continent.name == input}
     # NEED TO Check to see if the continent's countries have been called already
-    if Country.find_by_continent(continent).length == 0
+    if TravelGuides::Country.find_by_continent(continent).length == 0
       puts ""
       puts "Please wait while we generate a list of countries you can visit. This may take a bit depending on the region!"
       # puts "#{continent.name}"
-      Scraper.get_countries(continent)
+      TravelGuides::Scraper.get_countries(continent)
       puts ""
       puts "--------------------------"
       puts "#{@@pastel.cyan.bold(@@font.write(@continent_input))}"
@@ -159,8 +159,8 @@ class CommandLine
   end
 
   def display_travel_info(country_input)
-    country = Country.find_by_name(country_input)
-    travel_info = Scraper.get_travel_info(country)
+    country = TravelGuides::Country.find_by_name(country_input)
+    travel_info = TravelGuides::Scraper.get_travel_info(country)
     while travel_info.index(/[\.!?]\w/)
       travel_info = travel_info.insert(travel_info.index(/[\.!?]\w/) + 1, "\n\n")
     end

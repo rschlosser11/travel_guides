@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require './config/environment'
+require_relative '../lib/travel_guides'
 
-CommandLine.new.call
+TravelGuides::CommandLine.new.call
