@@ -34,5 +34,7 @@ class Scraper
   def self.get_travel_info(country)
     doc = Nokogiri::HTML(open("https://www.worldtravelguide.net#{country.url}"))
     about_country = doc.css("div[itemprop='text'] > p").text
+    country.info = about_country
+    about_country
   end
 end

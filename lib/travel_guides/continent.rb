@@ -25,4 +25,8 @@ class Continent
       self.new(name)
     end
   end
+
+  def find_all_countires
+    Country.all.select{|country| country.continent == self}
+  end
 end

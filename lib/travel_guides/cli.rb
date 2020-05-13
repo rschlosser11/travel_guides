@@ -147,16 +147,29 @@ class CommandLine
   end
 
   def display_travel_info(country_input)
-    country = Country.find_by_name(country_input)
-    travel_info = Scraper.get_travel_info(country)
-    while travel_info.index(/[\.!?]\w/)
-      travel_info = travel_info.insert(travel_info.index(/[\.!?]\w/) + 1, "\n\n")
+    if Country.find_by_name(country_input).info
+      travel_info = Country.find_by_name(country_input).info
+      while travel_info.index(/[\.!?]\w/)
+        travel_info = travel_info.insert(travel_info.index(/[\.!?]\w/) + 1, "\n\n")
+      end
+      puts ""
+      puts "--------------------------"
+      puts "#{@@pastel.cyan.bold(@@font.write(country_input.upcase))}"
+      puts WordWrap.ww "#{@@pastel.cyan(travel_info)}", 100
+      puts "--------------------------"
+      puts ""
+    else
+      country = Country.find_by_name(country_input)
+      travel_info = Scraper.get_travel_info(country)
+      while travel_info.index(/[\.!?]\w/)
+        travel_info = travel_info.insert(travel_info.index(/[\.!?]\w/) + 1, "\n\n")
+      end
+      puts ""
+      puts "--------------------------"
+      puts "#{@@pastel.cyan.bold(@@font.write(country_input.upcase))}"
+      puts WordWrap.ww "#{@@pastel.cyan(travel_info)}", 100
+      puts "--------------------------"
+      puts ""
     end
-    puts ""
-    puts "--------------------------"
-    puts "#{@@pastel.cyan.bold(@@font.write(country_input.upcase))}"
-    puts WordWrap.ww "#{@@pastel.cyan(travel_info)}", 100
-    puts "--------------------------"
-    puts ""
   end
 end

@@ -1,5 +1,5 @@
 class Country
-  attr_accessor :name, :url, :continent
+  attr_accessor :name, :url, :continent, :info
 
   @@all = []
 
