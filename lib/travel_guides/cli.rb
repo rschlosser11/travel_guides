@@ -11,41 +11,32 @@ class CommandLine
   end
 
   def run
-    @continent_input = ''
-    @country_input = ''
-    @last_input = ''
-    self.continent_menu(@continent_input, @country_input, @last_input)
+    self.continent_menu
   end
 
-  def continent_menu(continent_input, country_input, last_input)
+  def continent_menu
     @continent_input = gets.strip.split(" ").map{|word| word.capitalize}.join(" ")
-    continent_input = @continent_input
-    country_input = @country_input
-    last_input = @last_input
-    if Continent.find_by_name(continent_input)
+    if Continent.find_by_name(@continent_input)
       display_countries(@continent_input)
       puts "Please type the name of the country/state that you'd like to explore\n or type 'regions' to return to the region list \n or type 'exit'"
       @country_input = gets.strip.split(" ").map{|word| word.capitalize}.join(" ")
-      self.country_menu(continent_input, country_input, last_input)
+      self.country_menu
     elsif @continent_input.downcase == 'exit'
       puts ""
       self.leave
     else
       puts ""
       puts @@pastel.red("Please type the name of a valid region or 'exit'.")
-      self.continent_menu(continent_input, country_input, last_input)
+      self.continent_menu
     end
   end
 
-  def country_menu(continent_input, country_input, last_input)
-    continent_input = @continent_input
-    country_input = @country_input
-    last_input = @last_input
+  def country_menu
     if @country_input.downcase == 'regions'
       self.display_continents
       puts "Please type the number of the region you want to visit or type 'exit'."
       puts ""
-      self.continent_menu(continent_input, country_input, last_input)
+      self.continent_menu
       puts ""
     elsif @country_input.downcase == 'exit'
       self.leave
@@ -53,39 +44,36 @@ class CommandLine
       display_travel_info(@country_input)
       puts "To return to the country/state list type 'countries'\n to return to the region list type 'regions'\n to exit type 'exit'."
       @last_input = gets.strip.downcase
-      self.last_menu(continent_input, country_input, last_input)
+      self.last_menu
     else
       puts ""
       puts @@pastel.red("Please type the name of a country/state from the list.")
       @country_input = gets.strip.split(" ").map{|word| word.capitalize}.join(" ")
       puts ""
-      self.country_menu(continent_input, country_input, last_input)
+      self.country_menu
     end
   end
 
-  def last_menu(continent_input, country_input, last_input)
-    continent_input = @continent_input
-    country_input = @country_input
-    last_input = @last_input
+  def last_menu
     if @last_input == 'exit'
       self.leave
     elsif @last_input == 'regions'
       self.display_continents
       puts ""
       puts "Please type the number of the region you want to visit or type 'exit'."
-      self.continent_menu(continent_input, country_input, last_input)
+      self.continent_menu
     elsif @last_input == 'countries'
-      display_countries(continent_input)
+      display_countries(@continent_input)
       puts ""
       puts "Please type the name of the country/state that you'd like to explore\n or type 'regions' to return to the region list \n or type 'exit'"
       puts ""
       @country_input = gets.strip.split(" ").map{|word| word.capitalize}.join(" ")
-      self.country_menu(continent_input, country_input, last_input)
+      self.country_menu
     else
       puts ""
       puts @@pastel.red("Please enter 'exit', 'regions', or 'countries'!")
       @last_input = gets.strip.downcase
-      self.last_menu(continent_input, country_input, last_input)
+      self.last_menu
     end
   end
 
