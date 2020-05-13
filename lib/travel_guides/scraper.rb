@@ -1,4 +1,4 @@
-class TravelGuides::Scraper
+class Scraper
   # Get document
   def self.get_doc
     Nokogiri::HTML(open('https://www.worldtravelguide.net/country-guides/'))
@@ -15,7 +15,7 @@ class TravelGuides::Scraper
     continents << self.get_doc.css('.north-america').text
     continents << self.get_doc.css('.oceania').text
     continents << self.get_doc.css('.south-america').text
-    continents.each {|continent_name| TravelGuides::Continent.new(continent_name)}
+    continents.each {|continent_name| Continent.new(continent_name)}
   end
   # Get list of countries
   def self.get_countries(continent)
@@ -25,9 +25,9 @@ class TravelGuides::Scraper
       country_hash = {
         :name => "#{self.get_doc.css("##{continent_name} .menu-columns li")[index].text}",
         :url => "#{self.get_doc.css("##{continent_name} .menu-columns li").css("a")[index]["href"]}",
-        :continent => TravelGuides::Continent.find_or_create_by_name(continent.name)
+        :continent => Continent.find_or_create_by_name(continent.name)
       }
-      TravelGuides::Country.find_or_create_by_hash(country_hash)
+      Country.find_or_create_by_hash(country_hash)
     end
   end
   # Get overview of the country chosen by the user

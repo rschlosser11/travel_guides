@@ -1,4 +1,4 @@
-class TravelGuides::Continent
+class Continent
   attr_accessor :name
 
   @@all = [];
