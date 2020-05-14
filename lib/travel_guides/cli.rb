@@ -17,7 +17,7 @@ class CommandLine
   def continent_menu
     @continent_input = gets.strip.split(" ").map{|word| word.capitalize}.join(" ")
     if Continent.find_by_name(@continent_input)
-      display_countries(@continent_input)
+      self.display_countries(@continent_input)
       puts "Please type the name of the country/state that you'd like to explore\n or type 'regions' to return to the region list \n or type 'exit'"
       @country_input = gets.strip.split(" ").map{|word| word.capitalize}.join(" ")
       self.country_menu
@@ -34,7 +34,7 @@ class CommandLine
   def country_menu
     if @country_input.downcase == 'regions'
       self.display_continents
-      puts "Please type the number of the region you want to visit or type 'exit'."
+      puts "Please type the name of the region you want to visit or type 'exit'."
       puts ""
       self.continent_menu
       puts ""
@@ -60,7 +60,7 @@ class CommandLine
     elsif @last_input == 'regions'
       self.display_continents
       puts ""
-      puts "Please type the number of the region you want to visit or type 'exit'."
+      puts "Please type the name of the region you want to visit or type 'exit'."
       self.continent_menu
     elsif @last_input == 'countries'
       display_countries(@continent_input)

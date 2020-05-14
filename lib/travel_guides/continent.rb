@@ -13,8 +13,8 @@ class Continent
   end
 
   def self.find_by_name(name)
-    continent_name = name.split.map {|word| word.capitalize}.join(" ")
-    self.all.find {|continent| continent.name == continent_name}
+    # continent_name = name.split.map {|word| word.capitalize}.join(" ")
+    self.all.find {|continent| continent.name == name}
   end
 
   def self.find_or_create_by_name(name)
